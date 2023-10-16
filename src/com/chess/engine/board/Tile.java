@@ -5,6 +5,7 @@ import com.chess.engine.pieces.Piece;
 import java.util.HashMap;
 import java.util.Map;
 
+
 import com.google.common.collect.ImmutableMap;
 
 public abstract class Tile {
@@ -19,7 +20,7 @@ public abstract class Tile {
     private static Map<Integer, EmptyTile> createAllPossibleEmptyTiles() {
         final Map<Integer, EmptyTile> emptyTileMap = new HashMap<>();
 
-        for (int i = 0; i < 64; i++) {
+        for (int i = 0; i < BoardUtils.NUM_TILES; i++) {
             emptyTileMap.put(i, new EmptyTile(i));
         }
 
