@@ -8,7 +8,7 @@ public class Move {
     Piece piece;
     int targetCoordinate;
 
-    public Move(Board board, Piece piece, int targetCoordinate) {
+    private Move(Board board, Piece piece, int targetCoordinate) {
         this.board = board;
         this.piece = piece;
         this.targetCoordinate = targetCoordinate;
