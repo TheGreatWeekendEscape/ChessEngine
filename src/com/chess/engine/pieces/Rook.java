@@ -27,7 +27,7 @@ public class Rook extends Piece {
             int candidateDestinationCoordinate = this.position;
 
             while (BoardUtils.isCoordinateInBoardRange(candidateDestinationCoordinate)) {
-                if (isFirstColumnExclusion(candidateDestinationCoordinate, candidateCoordinateOffset) ||
+                if (    isFirstColumnExclusion(candidateDestinationCoordinate, candidateCoordinateOffset) ||
                         isEighthColumnExclusion(candidateDestinationCoordinate, candidateCoordinateOffset)) {
                     break;
                 }
