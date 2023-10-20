@@ -9,6 +9,7 @@ public abstract class Piece {
 
     protected final int position;
     protected final Alliance alliance;
+    protected boolean firstMove = false;
 
     public Piece (final int position, final Alliance alliance) {
         this.position = position;
