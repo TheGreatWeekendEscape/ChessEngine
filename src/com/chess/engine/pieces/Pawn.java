@@ -43,7 +43,7 @@ public class Pawn extends Piece {
                 if (board.getTile(candidateDestinationCoordinate).isOccupied()) {
                     Piece pieceOnCandidate = board.getTile(candidateDestinationCoordinate).getPiece();
                     if (this.alliance != pieceOnCandidate.getAlliance()) {
-                        //TODO Make new special atack pawn move class
+                        //TODO Make new special attack pawn move class
                         legalMoves.add(new Move.MajorMove(board, this, candidateDestinationCoordinate));
                     }
                 }
@@ -53,7 +53,7 @@ public class Pawn extends Piece {
                 if (board.getTile(candidateDestinationCoordinate).isOccupied()) {
                     Piece pieceOnCandidate = board.getTile(candidateDestinationCoordinate).getPiece();
                     if (this.alliance != pieceOnCandidate.getAlliance()) {
-                        //TODO Make new special atack pawn move class
+                        //TODO Make new special attack pawn move class
                         legalMoves.add(new Move.MajorMove(board, this, candidateDestinationCoordinate));
                     }
                 }
@@ -62,5 +62,10 @@ public class Pawn extends Piece {
 
         }
         return ImmutableList.copyOf(legalMoves);
+    }
+
+    @Override
+    public String toString() {
+        return PieceType.PAWN.toString();
     }
 }

@@ -21,4 +21,6 @@ public class BoardUtils {
 
         return cols;
     }
+
+    //TODO InnitRows method?
 }

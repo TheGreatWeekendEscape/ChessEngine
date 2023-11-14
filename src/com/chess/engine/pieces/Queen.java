@@ -58,4 +58,9 @@ public class Queen extends Piece {
     private static boolean isEighthColumnExclusion(final int currentPosition, final int candidateOffset) {
         return BoardUtils.FIRST_COLUMN[currentPosition] && (candidateOffset == -7 || candidateOffset == 1 || candidateOffset == 9);
     }
+
+    @Override
+    public String toString() {
+        return PieceType.QUEEN.toString();
+    }
 }
