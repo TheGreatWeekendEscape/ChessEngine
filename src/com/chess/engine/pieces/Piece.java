@@ -7,11 +7,13 @@ import java.util.Collection;
 
 public abstract class Piece {
 
+    protected PieceType type;
     protected final int position;
     protected final Alliance alliance;
     protected boolean firstMove = false;
 
-    public Piece (final int position, final Alliance alliance) {
+    public Piece (PieceType type, final int position, final Alliance alliance) {
+        this.type = type;
         this.position = position;
         this.alliance = alliance;
     }
@@ -21,6 +23,10 @@ public abstract class Piece {
     }
 
     public int getPosition() { return this.position; };
+
+    public PieceType getType() {
+        return this.type;
+    }
 
     public abstract Collection<Move> calculateLegalMoves(Board board);
 
