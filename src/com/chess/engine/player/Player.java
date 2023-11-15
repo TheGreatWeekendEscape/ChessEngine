@@ -83,12 +83,15 @@ public abstract class Player {
             return new MoveTransition(this.board, move, MoveStatus.ILLEGAL_MOVE);
         }
         Board transitionBoard = move.execute();
-        Collection<Move> kingsAttacks = Player.calculateAttacksOnTile(transitionBoard.getCurrentPlayer().getOpponent().getKing().getPosition(),
+        System.out.println(transitionBoard);
+        Collection<Move> kingsAttacks = calculateAttacksOnTile(transitionBoard.getCurrentPlayer().getOpponent().getKing().getPosition(),
                 transitionBoard.getCurrentPlayer().getLegalMoves());
 
         if (!kingsAttacks.isEmpty()) {
             return new MoveTransition(this.board, move, MoveStatus.LEAVES_PLAYER_IN_CHECK);
         }
+
+        //move.getPiece().setFirstMove(false);
 
         return new MoveTransition(transitionBoard, move, MoveStatus.DONE);
 

@@ -17,11 +17,13 @@ public class Board {
     private WhitePlayer whitePlayer;
     private BlackPlayer blackPlayer;
     private Player currentPlayer;
+    private Pawn enPassantPawn;
 
     private Board(Builder builder) {
         this.gameBoard = createGameBoard(builder);
         this.whitePieces = calculateActivePieces(this.gameBoard, Alliance.WHITE);
         this.blackPieces = calculateActivePieces(this.gameBoard, Alliance.BLACK);
+        this.enPassantPawn = builder.enPassantPawn;
 
         Collection<Move> whiteStandardLegalMoves = calculateLegalMoves(this.whitePieces);
         Collection<Move> blackStandardLegalMoves = calculateLegalMoves(this.blackPieces);
@@ -117,11 +119,13 @@ public class Board {
         return this.blackPieces;
     }
 
-    public Player getWhitePlayer() { return this.whitePlayer; };
+    public Player getWhitePlayer() { return this.whitePlayer; }
 
-    public Player getBlackPlayer() { return this.blackPlayer; };
+    public Player getBlackPlayer() { return this.blackPlayer; }
 
-    public Player getCurrentPlayer() { return this.currentPlayer; };
+    public Player getCurrentPlayer() { return this.currentPlayer; }
+
+    public Pawn getEnPassantPawn () { return this.enPassantPawn; }
 
     @Override
     public String toString() {

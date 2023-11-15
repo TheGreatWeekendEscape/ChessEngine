@@ -30,7 +30,8 @@ public abstract class Piece {
         return result;
     }
 
-    public abstract Collection<Move> calculateLegalMoves(Board board);
+    public abstract Collection<Move>
+    calculateLegalMoves(Board board);
 
     public abstract Piece movePiece(Move move);
 

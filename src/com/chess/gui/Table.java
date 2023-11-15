@@ -31,7 +31,6 @@ public class Table {
     private Tile destinationTile;
     private Piece humanMovedPiece;
     private BoardDirection boardDirection;
-    private boolean highlightLegalMoves;
     private static String defaultPieceImagesPath = "images/pieceIcons_v2/";
     private final static Dimension OUTER_FRAME_DIMENSION = new Dimension(600, 600);
     private final static Dimension BOARD_PANEL_DIMENSION = new Dimension(400, 350);
@@ -44,7 +43,6 @@ public class Table {
         this.gameFrame.setJMenuBar(tableMenuBar);
         this.gameFrame.setSize(OUTER_FRAME_DIMENSION);
         this.chessBoard = Board.createStandardBoard();
-        highlightLegalMoves = false;
         this.gameFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.boardPanel = new BoardPanel();
         this.boardDirection = BoardDirection.NORMAL;
@@ -95,39 +93,35 @@ public class Table {
         preferencesMenu.add(flipBoardMenuItem);
         preferencesMenu.addSeparator();
 
-        JCheckBoxMenuItem legalMoveHighlitghterCheckbox = new JCheckBoxMenuItem("Show legal moves", false);
-        legalMoveHighlitghterCheckbox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                highlightLegalMoves = legalMoveHighlitghterCheckbox.isSelected();
-            }
-        });
-        preferencesMenu.add(legalMoveHighlitghterCheckbox);
         return preferencesMenu;
     }
 
     public enum BoardDirection {
         NORMAL {
-             @Override
-            List<TilePanel> traverse (final List<TilePanel> boardTiles) {
-                 return boardTiles;
-             }
-             @Override
+            @Override
+            List<TilePanel> traverse(final List<TilePanel> boardTiles) {
+                return boardTiles;
+            }
+
+            @Override
             BoardDirection opposite() {
-                 return FLIPPED;
-             }
+                return FLIPPED;
+            }
         },
         FLIPPED {
             @Override
-            List<TilePanel> traverse (final List<TilePanel> boardTiles) {
+            List<TilePanel> traverse(final List<TilePanel> boardTiles) {
                 return Lists.reverse(boardTiles);
             }
+
             @Override
             BoardDirection opposite() {
                 return NORMAL;
             }
         };
-        abstract List<TilePanel> traverse (final List<TilePanel> boardTiles);
+
+        abstract List<TilePanel> traverse(final List<TilePanel> boardTiles);
+
         abstract BoardDirection opposite();
     }
 
@@ -145,7 +139,7 @@ public class Table {
             setPreferredSize(BOARD_PANEL_DIMENSION);
         }
 
-        public void drawBoard (Board board) {
+        public void drawBoard(Board board) {
             removeAll();
             for (TilePanel tilePanel : boardDirection.traverse(boardTiles)) {
                 tilePanel.drawTile(board);
@@ -237,27 +231,23 @@ public class Table {
 
                 @Override
                 public void mousePressed(MouseEvent e) {
-
                 }
 
                 @Override
                 public void mouseReleased(MouseEvent e) {
-
                 }
 
                 @Override
                 public void mouseEntered(MouseEvent e) {
-
                 }
 
                 @Override
                 public void mouseExited(MouseEvent e) {
-
                 }
             });
         }
 
-        public void drawTile (Board board) {
+        public void drawTile(Board board) {
             assignTileColor();
             assignTilePieceIcon(board);
             highlightLegalMoves(board);
@@ -286,20 +276,18 @@ public class Table {
         }
 
         private void highlightLegalMoves(Board board) {
-            if (true) { //Option in the preferences menu option
-                for (Move move : pieceLegalMoves(board)) {
-                    if (move.getTargetCoordinate() == this.tileCoordinate) {
-                        try {
-                            add(new JLabel(new ImageIcon(ImageIO.read(new File("images/highlight.png")))));
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+            for (Move move : pieceLegalMoves(board)) {
+                if (move.getTargetCoordinate() == this.tileCoordinate) {
+                    try {
+                        add(new JLabel(new ImageIcon(ImageIO.read(new File("images/highlight.png")))));
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
             }
         }
 
-        private Collection<Move> pieceLegalMoves (Board board) {
+        private Collection<Move> pieceLegalMoves(Board board) {
             if (humanMovedPiece != null && humanMovedPiece.getAlliance() == board.getCurrentPlayer().getAlliance()) {
                 return humanMovedPiece.calculateLegalMoves(board);
             }
