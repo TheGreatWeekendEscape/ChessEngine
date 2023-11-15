@@ -7,15 +7,24 @@ import com.chess.engine.pieces.Rook;
 
 public abstract class Move {
 
-    Board board;
-    Piece piece;
-    int targetCoordinate;
+    protected final Board board;
+    protected final Piece piece;
+    protected final int targetCoordinate;
+    protected final boolean isFirstMove;
     public static final Move NULL_MOVE = new NullMove();
 
     private Move(Board board, Piece piece, int targetCoordinate) {
         this.board = board;
         this.piece = piece;
         this.targetCoordinate = targetCoordinate;
+        this.isFirstMove = piece.isFirstMove();
+    }
+
+    private Move(Board board, int targetCoordinate) {
+        this.board = board;
+        this.targetCoordinate = targetCoordinate;
+        this.piece = null;
+        this.isFirstMove = false;
     }
 
     public int getCurrentCoordinate() {
@@ -63,6 +72,7 @@ public abstract class Move {
         int result = 1;
         result = prime * result + this.targetCoordinate;
         result = prime * result + this.piece.hashCode();
+        result = prime * result + this.piece.getPosition();
         return result;
     }
 
@@ -76,12 +86,23 @@ public abstract class Move {
         }
         Move otherMove = (Move) o;
         return this.getTargetCoordinate() == otherMove.getTargetCoordinate()
-                && this.getPiece() == otherMove.getPiece();
+                && this.getPiece() == otherMove.getPiece()
+                && this.getCurrentCoordinate() == otherMove.getCurrentCoordinate();
     }
 
     public static class MajorMove extends Move {
         public MajorMove(Board board, Piece piece, int targetCoordinate) {
             super(board, piece, targetCoordinate);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            return this == o ||o instanceof MajorMove && super.equals(o);
+        }
+
+        @Override
+        public String toString() {
+            return piece.getType().toString() + "";
         }
     }
 
@@ -166,6 +187,11 @@ public abstract class Move {
             builder.setMoveMaker(this.board.getCurrentPlayer().getOpponent().getAlliance());
             return builder.build();
         }
+
+        @Override
+        public String toString() {
+            return BoardUtils.getPositionAtCoordinate(this.getTargetCoordinate());
+        }
     }
 
     public static class CastleMove extends Move {
@@ -233,7 +259,7 @@ public abstract class Move {
 
     public static class NullMove extends Move {
         public NullMove() {
-            super(null, null, -1);
+            super(null, -1);
         }
 
         @Override

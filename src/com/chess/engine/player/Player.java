@@ -2,6 +2,8 @@ package com.chess.engine.player;
 
 import com.chess.engine.board.Board;
 import com.chess.engine.board.Move;
+import com.chess.engine.board.MoveStatus;
+import com.chess.engine.board.MoveTransition;
 import com.chess.engine.pieces.Alliance;
 import com.chess.engine.pieces.King;
 import com.chess.engine.pieces.Piece;

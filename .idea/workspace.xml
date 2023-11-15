@@ -4,13 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5b769e27-36bf-4037-98cf-36946902b78a" name="Changes" comment="">
+    <list default="true" id="5b769e27-36bf-4037-98cf-36946902b78a" name="Changes" comment="Move class finished">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/chess/engine/Chess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/chess/Chess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/chess/engine/board/BoardUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/chess/engine/board/BoardUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/chess/engine/board/Move.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/chess/engine/board/Move.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/chess/engine/board/Tile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/chess/engine/board/Tile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/chess/engine/pieces/Bishop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/chess/engine/pieces/Bishop.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/chess/engine/pieces/King.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/chess/engine/pieces/King.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/chess/engine/pieces/Knight.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/chess/engine/pieces/Knight.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/chess/engine/pieces/Pawn.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/chess/engine/pieces/Pawn.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/chess/engine/pieces/Piece.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/chess/engine/pieces/Piece.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/chess/engine/pieces/Queen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/chess/engine/pieces/Queen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/chess/engine/pieces/Rook.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/chess/engine/pieces/Rook.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/chess/engine/player/BlackPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/chess/engine/player/BlackPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/chess/engine/player/MoveStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/chess/engine/board/MoveStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/chess/engine/player/MoveTransition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/chess/engine/board/MoveTransition.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/chess/engine/player/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/chess/engine/player/Player.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/chess/engine/player/WhitePlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/chess/engine/player/WhitePlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/chess/gui/Table.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/chess/gui/Table.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,11 +67,11 @@
 }</component>
   <component name="RunManager">
     <configuration name="Chess" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.chess.engine.Chess" />
+      <option name="MAIN_CLASS_NAME" value="com.chess.Chess" />
       <module name="ChessEngineBack" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.chess.engine.*" />
+          <option name="PATTERN" value="com.chess.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -96,12 +107,16 @@
       </map>
     </option>
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Move class finished" />
+    <option name="LAST_COMMIT_MESSAGE" value="Move class finished" />
+  </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/com/chess/engine/player/Player.java</url>
-          <line>31</line>
+          <line>33</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>

@@ -14,7 +14,11 @@ public class Pawn extends Piece {
     private final static int[] CANDIDATE_MOVE_COORDINATES = {8, 16, 7, 9};
 
     public Pawn(int position, Alliance alliance) {
-        super(PieceType.PAWN, position, alliance);
+        super(PieceType.PAWN, position, alliance, true);
+    }
+
+    public Pawn(int position, Alliance alliance, boolean isFirstMove) {
+        super(PieceType.PAWN, position, alliance, isFirstMove);
     }
 
     @Override
@@ -35,7 +39,7 @@ public class Pawn extends Piece {
                 int behindCandidateDestinationCoordinate = this.position + (this.alliance.getDirection() * 8);
                 if (!board.getTile(behindCandidateDestinationCoordinate).isOccupied() &&
                         !board.getTile(candidateDestinationCoordinate).isOccupied()) {
-                    legalMoves.add(new Move.MajorMove(board, this, candidateDestinationCoordinate));
+                    legalMoves.add(new Move.PawnJump(board, this, candidateDestinationCoordinate));
                 }
             } else if (candidateCoordinateOffset == 7 &&
                     !((BoardUtils.EIGHTH_COLUMN[this.position] && this.alliance.equals(Alliance.WHITE) ||
@@ -44,7 +48,7 @@ public class Pawn extends Piece {
                     Piece pieceOnCandidate = board.getTile(candidateDestinationCoordinate).getPiece();
                     if (this.alliance != pieceOnCandidate.getAlliance()) {
                         //TODO Make new special attack pawn move class
-                        legalMoves.add(new Move.MajorMove(board, this, candidateDestinationCoordinate));
+                        legalMoves.add(new Move.PawnAttackMove(board, this, candidateDestinationCoordinate, pieceOnCandidate));
                     }
                 }
             } else if (candidateCoordinateOffset == 9 &&
@@ -54,7 +58,7 @@ public class Pawn extends Piece {
                     Piece pieceOnCandidate = board.getTile(candidateDestinationCoordinate).getPiece();
                     if (this.alliance != pieceOnCandidate.getAlliance()) {
                         //TODO Make new special attack pawn move class
-                        legalMoves.add(new Move.MajorMove(board, this, candidateDestinationCoordinate));
+                        legalMoves.add(new Move.PawnAttackMove(board, this, candidateDestinationCoordinate, pieceOnCandidate));
                     }
                 }
 
