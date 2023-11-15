@@ -33,7 +33,9 @@ public abstract class Tile {
         return piece != null ? new OccupiedTile(coordinate, piece) : EMPTY_TILES_CACHE.get(coordinate);
     }
 
-
+    public int getCoordinate() {
+        return this.coordinate;
+    }
     public abstract boolean isOccupied();
     public abstract Piece getPiece();
 

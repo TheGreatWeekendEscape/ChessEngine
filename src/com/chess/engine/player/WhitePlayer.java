@@ -5,6 +5,7 @@ import com.chess.engine.board.Move;
 import com.chess.engine.board.Tile;
 import com.chess.engine.pieces.Alliance;
 import com.chess.engine.pieces.Piece;
+import com.chess.engine.pieces.Rook;
 import com.google.common.collect.ImmutableList;
 
 import java.util.ArrayList;
@@ -50,8 +51,8 @@ public class WhitePlayer extends Player {
                     if (Player.calculateAttacksOnTile(61, opponentLegalMoves).isEmpty() &&
                             Player.calculateAttacksOnTile(62, opponentLegalMoves).isEmpty() &&
                             rookTile.getPiece().getType() == Piece.PieceType.ROOK) {
-                        //TODO Implement method
-                        kingCastles.add(null);
+                        kingCastles.add(new Move.KingsideCastleMove
+                                (this.board, this.king, 62, (Rook)rookTile.getPiece(), rookTile.getCoordinate(), 61));
                     }
                 }
             }
@@ -65,8 +66,8 @@ public class WhitePlayer extends Player {
                             && Player.calculateAttacksOnTile(58, opponentLegalMoves).isEmpty()
                             && Player.calculateAttacksOnTile(57, opponentLegalMoves).isEmpty()
                             && rookTile.getPiece().getType() == Piece.PieceType.ROOK) {
-                        //TODO Implement method
-                        kingCastles.add(null);
+                        kingCastles.add(new Move.QueensideCastleMove
+                                (this.board, this.king, 58, (Rook)rookTile.getPiece(), rookTile.getCoordinate(), 59));
                     }
 
                 }

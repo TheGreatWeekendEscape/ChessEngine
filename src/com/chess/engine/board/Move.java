@@ -200,6 +200,7 @@ public abstract class Move {
                 builder.setPiece(piece);
             }
             builder.setPiece(this.piece.movePiece(this));
+            //TODO Look into the first move on normal pieces
             builder.setPiece(new Rook(this.castleRookDestinationCoordinate, this.castleRook.getAlliance()));
             builder.setMoveMaker(this.board.getCurrentPlayer().getOpponent().getAlliance());
             return builder.build();
@@ -211,12 +212,22 @@ public abstract class Move {
                                   Rook castleRook, int castleRookStartCoordinate, int castleRookDestinationCoordinate) {
             super(board, piece, targetCoordinate, castleRook, castleRookStartCoordinate, castleRookDestinationCoordinate);
         }
+
+        @Override
+        public String toString() {
+            return "0-0";
+        }
     }
 
     public static class QueensideCastleMove extends CastleMove {
         public QueensideCastleMove(Board board, Piece piece, int targetCoordinate,
                                    Rook castleRook, int castleRookStartCoordinate, int castleRookDestinationCoordinate) {
             super(board, piece, targetCoordinate, castleRook, castleRookStartCoordinate, castleRookDestinationCoordinate);
+        }
+
+        @Override
+        public String toString() {
+            return "0-0-0";
         }
     }
 
