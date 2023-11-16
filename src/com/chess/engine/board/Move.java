@@ -39,6 +39,8 @@ public abstract class Move {
         return this.piece;
     }
 
+    public Board getBoard() { return this.board; }
+
     public boolean isAttack() {
         return false;
     }
@@ -187,7 +189,7 @@ public abstract class Move {
 
         @Override
         public String toString() {
-            return BoardUtils.getPositionAtCoordinate(this.piece.getPosition()).substring(0, 1) + "x"
+            return BoardUtils.getPositionAtCoordinate(this.piece.getPosition()).charAt(0) + "x"
                     + BoardUtils.getPositionAtCoordinate(this.targetCoordinate);
         }
     }
@@ -359,6 +361,59 @@ public abstract class Move {
         @Override
         public int getCurrentCoordinate() {
             return -1;
+        }
+    }
+
+    public static class PawnPromotion extends Move {
+        Move decoratedMove;
+        Pawn promotedPawn;
+
+        public PawnPromotion(Move decorateMove) {
+            super(decorateMove.getBoard(), decorateMove.getPiece(), decorateMove.getTargetCoordinate());
+            this.decoratedMove = decorateMove;
+            this.promotedPawn = (Pawn) decorateMove.getPiece();
+        }
+
+        @Override
+        public Board execute() {
+            Board pawnMovedBoard = this.decoratedMove.execute();
+            Builder builder = new Builder();
+            for (Piece piece : pawnMovedBoard.getCurrentPlayer().getActivePieces()) {
+                if (!this.promotedPawn.equals(piece)) {
+                    builder.setPiece(piece);
+                }
+            }
+            for (Piece piece : pawnMovedBoard.getCurrentPlayer().getOpponent().getActivePieces()) {
+                builder.setPiece(piece);
+            }
+            builder.setPiece(this.promotedPawn.getPromotionPiece().movePiece(this));
+            builder.setMoveMaker(pawnMovedBoard.getCurrentPlayer().getAlliance());
+            return builder.build();
+        }
+
+        @Override
+        public boolean isAttack() {
+            return this.decoratedMove.isAttack();
+        }
+
+        @Override
+        public Piece getAttackedPiece() {
+            return this.decoratedMove.getAttackedPiece();
+        }
+
+        @Override
+        public String toString() {
+            return "";
+        }
+
+        @Override
+        public int hashCode() {
+            return decoratedMove.hashCode() + (31 * promotedPawn.hashCode());
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            return this == o || o instanceof PawnPromotion && super.equals(o);
         }
     }
 

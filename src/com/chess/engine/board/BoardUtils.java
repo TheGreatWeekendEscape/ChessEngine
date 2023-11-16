@@ -11,6 +11,8 @@ public class BoardUtils {
     public static final boolean[] SECOND_COLUMN = initCols(1);
     public static final boolean[] SEVENTH_COLUMN = initCols(6);
     public static final boolean[] EIGHTH_COLUMN = initCols(7);
+    public static final boolean[] FIRST_ROW = initRows(0);
+    public static final boolean[] EIGHTH_ROW = initRows(7);
     public static final int NUM_TILES = 64;
     public static final int TILES_PER_ROW = 8;
     public static final String[] ALGEBRAIC_NOTATION = initAlgebraicNotation();
@@ -53,6 +55,16 @@ public class BoardUtils {
         }
 
         return cols;
+    }
+
+    private static boolean[] initRows(int rowNumber) {
+
+        boolean[] rows = new boolean[NUM_TILES];
+        for (int i = (rowNumber * TILES_PER_ROW); i < TILES_PER_ROW; i++) {
+            rows[i] = true;
+        }
+
+        return rows;
     }
 
     public static int getCoordinateAtPosition(String position) {
