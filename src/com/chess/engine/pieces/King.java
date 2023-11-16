@@ -12,15 +12,19 @@ import java.util.List;
 
 public class King extends Piece {
 
+    private boolean castled;
     private static final int[] CANDIDATE_MOVE_COORDINATES = {-9, -8, -7, -1, 1, 7, 8, 9};
 
     public King(int position, Alliance alliance) {
         super(PieceType.KING, position, alliance, true);
+        this.castled = false;
     }
 
     public King(int position, Alliance alliance, boolean isFirstMove) {
         super(PieceType.KING, position, alliance, isFirstMove);
+        this.castled = false;
     }
+
 
     @Override
     public Collection<Move> calculateLegalMoves(Board board) {
@@ -60,6 +64,14 @@ public class King extends Piece {
         return BoardUtils.EIGHTH_COLUMN[currentPosition] && (candidateOffset == -7 || candidateOffset == 1 || candidateOffset == 9);
     }
 
+    public boolean isCastled() {
+        return this.castled;
+    }
+
+    public void setCastled(boolean castled) {
+        this.castled = castled;
+    }
+
     @Override
     public String toString() {
         return PieceType.KING.toString();
@@ -67,6 +79,11 @@ public class King extends Piece {
 
     @Override
     public King movePiece(Move move) {
-        return new King(move.getTargetCoordinate(), move.getPiece().getAlliance(), false);
+        if (move.isCastleMove()) {
+            this.castled = true;
+        }
+        King king = new King(move.getTargetCoordinate(), move.getPiece().getAlliance(), false);
+        king.setCastled(this.castled);
+        return king;
     }
 }

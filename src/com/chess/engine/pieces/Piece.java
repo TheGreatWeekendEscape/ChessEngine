@@ -51,6 +51,8 @@ public abstract class Piece {
         return this.firstMove;
     }
 
+    public int getValue() { return this.type.getPieceValue(); }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -71,12 +73,12 @@ public abstract class Piece {
 
     public enum PieceType {
 
-        PAWN("P", 1),
-        KNIGHT("N", 3),
-        BISHOP("B", 3),
-        ROOK("R", 5),
-        QUEEN("Q", 9),
-        KING("K", 0);
+        PAWN("P", 100),
+        KNIGHT("N", 300),
+        BISHOP("B", 300),
+        ROOK("R", 500),
+        QUEEN("Q", 900),
+        KING("K", 1000);
 
         private final String name;
         private final int pieceValue;

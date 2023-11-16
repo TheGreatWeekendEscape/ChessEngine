@@ -29,21 +29,17 @@ public abstract class Move {
     public int getCurrentCoordinate() {
         return this.piece.getPosition();
     }
-
     public int getTargetCoordinate() {
         return this.targetCoordinate;
     }
-
     public Piece getPiece() {
         return this.piece;
     }
-
     public Board getBoard() { return this.board; }
-
     public boolean isAttack() {
         return false;
     }
-
+    public boolean isCastleMove() { return false; }
     public Piece getAttackedPiece() {
         return null;
     }
@@ -284,6 +280,11 @@ public abstract class Move {
             }
             final CastleMove otherCastleMove = (CastleMove) o;
             return super.equals(otherCastleMove) && this.castleRook.equals(otherCastleMove.getCastleRook());
+        }
+
+        @Override
+        public boolean isCastleMove() {
+            return true;
         }
 
         @Override

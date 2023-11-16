@@ -40,7 +40,7 @@ public class WhitePlayer extends Player {
      * - No puede haber ninguna pieza entre el rey y la torre.
      */
     @Override
-    protected Collection<Move> calculateKingCastles(Collection<Move> playerLegalMoves, Collection<Move> opponentLegalMoves) {
+    public Collection<Move> calculateKingCastles(Collection<Move> playerLegalMoves, Collection<Move> opponentLegalMoves) {
         List<Move> kingCastles = new ArrayList<>();
 
         if (this.king.isFirstMove() && !this.isInCheck()) {

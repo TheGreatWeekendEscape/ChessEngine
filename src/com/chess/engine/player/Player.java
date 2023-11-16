@@ -61,19 +61,6 @@ public abstract class Player {
         return false;
     }
 
-    public boolean isInCheck() {
-        return this.isInCheck;
-    }
-
-    public boolean isInCheckMate() {
-        return this.isInCheck && !hasEscapeMoves();
-    }
-
-    public boolean isInStaleMate() {
-        return !this.isInCheck && !hasEscapeMoves();
-    }
-
-
     public MoveTransition makeMove(Move move) {
         if (!isMoveLegal(move)) {
             return new MoveTransition(this.board, move, MoveStatus.ILLEGAL_MOVE);
@@ -95,12 +82,21 @@ public abstract class Player {
     public abstract Alliance getAlliance();
     public abstract Player getOpponent();
 
-    protected abstract Collection<Move> calculateKingCastles(Collection<Move> playerLegalMoves, Collection<Move> opponentLegalMoves);
+    public abstract Collection<Move> calculateKingCastles(Collection<Move> playerLegalMoves, Collection<Move> opponentLegalMoves);
 
     public King getKing() {
         return this.king;
     }
-
+    public boolean isInCheck() {
+        return this.isInCheck;
+    }
+    public boolean isInCheckMate() {
+        return this.isInCheck && !hasEscapeMoves();
+    }
+    public boolean isInStaleMate() {
+        return !this.isInCheck && !hasEscapeMoves();
+    }
+    public boolean isCastled() { return this.getKing().isCastled(); }
     public Collection<Move> getLegalMoves () {
         return this.legalMoves;
     }

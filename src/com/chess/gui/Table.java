@@ -2,6 +2,10 @@ package com.chess.gui;
 
 import com.chess.engine.board.*;
 import com.chess.engine.pieces.Piece;
+import com.chess.engine.player.ai.MiniMax;
+import com.chess.engine.player.ai.MoveStrategy;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import javax.imageio.ImageIO;
@@ -14,15 +18,14 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import static javax.swing.SwingUtilities.isLeftMouseButton;
 import static javax.swing.SwingUtilities.isRightMouseButton;
 
-public class Table {
+public class Table extends Observable {
 
     private final JFrame gameFrame;
     private final BoardPanel boardPanel;
@@ -31,10 +34,13 @@ public class Table {
     private Tile destinationTile;
     private Piece humanMovedPiece;
     private BoardDirection boardDirection;
+    private final GameSetup gameSetup;
+    private Move computerMove;
     private final static String defaultPieceImagesPath = "images/pieceIcons_v2/";
     private final static Dimension OUTER_FRAME_DIMENSION = new Dimension(600, 600);
     private final static Dimension BOARD_PANEL_DIMENSION = new Dimension(400, 350);
     private final static Dimension TILE_PANEL_DIMENSION = new Dimension(10, 10);
+    private static final Table INSTANCE = new Table();
 
     public Table() {
         this.gameFrame = new JFrame("Chess");
@@ -46,15 +52,33 @@ public class Table {
         this.chessBoard = Board.createStandardBoard();
         this.gameFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.boardPanel = new BoardPanel();
+        this.addObserver(new TableGameAIWatcer());
+        this.gameSetup = new GameSetup(this.gameFrame, true);
         this.boardDirection = BoardDirection.NORMAL;
         this.gameFrame.add(this.boardPanel, BorderLayout.CENTER);
         this.gameFrame.setVisible(true);
+    }
+
+    public void show() {
+        Table.get().getBoardPanel().drawBoard(Table.get().getGameBoard());
+    }
+    public static Table get() {
+        return INSTANCE;
+    }
+
+    private GameSetup getGameSetup() {
+        return this.gameSetup;
+    }
+
+    private Board getGameBoard() {
+        return this.chessBoard;
     }
 
     private JMenuBar createMenuBar() {
         JMenuBar tableMenuBar = new JMenuBar();
         tableMenuBar.add(createFileMenu());
         tableMenuBar.add(createPreferencesMenu());
+        tableMenuBar.add(createOptionsMenu());
         return tableMenuBar;
     }
 
@@ -95,6 +119,91 @@ public class Table {
         preferencesMenu.addSeparator();
 
         return preferencesMenu;
+    }
+
+    private JMenu createOptionsMenu() {
+        final JMenu optionsMenu = new JMenu("Options");
+        JMenuItem setupGameMenuItem = new JMenuItem("Setup Game");
+        setupGameMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Table.get().getGameSetup().promptUser();
+                Table.get().setupUpdate(Table.get().getGameSetup());
+            }
+        });
+        optionsMenu.add(setupGameMenuItem);
+        return optionsMenu;
+    }
+
+    public void setupUpdate(GameSetup gameSetup) {
+        setChanged();
+        notifyObservers(gameSetup);
+    }
+
+    private static class TableGameAIWatcer implements Observer {
+        @Override
+        public void update(Observable o, Object arg) {
+
+            if (Table.get().getGameSetup().isAIPlayer(Table.get().getGameBoard().getCurrentPlayer()) &&
+            !Table.get().getGameBoard().getCurrentPlayer().isInCheckMate() &&
+            !Table.get().getGameBoard().getCurrentPlayer().isInStaleMate()) {
+                AIThinkTank thinkTank = new AIThinkTank();
+                thinkTank.execute();
+            }
+
+            if (Table.get().getGameBoard().getCurrentPlayer().isInCheckMate()) {
+                System.out.println("Game over " + Table.get().getGameBoard().getCurrentPlayer() + " is in checkmate");
+            }
+            if (Table.get().getGameBoard().getCurrentPlayer().isInStaleMate()) {
+                System.out.println("Game over " + Table.get().getGameBoard().getCurrentPlayer() + " is in stalemate");
+            }
+        }
+    }
+
+    public void updateGameBoard(Board board) {
+        this.chessBoard = board;
+    }
+
+    public void updateComputerMove(Move move) {
+        this.computerMove = move;
+    }
+
+    private BoardPanel getBoardPanel() {
+        return this.boardPanel;
+    }
+
+    private void moveMadeUpdate(PlayerType playerType) {
+        setChanged();
+        notifyObservers(playerType);
+    }
+
+
+
+    private static class AIThinkTank extends SwingWorker<Move, String> {
+
+        private AIThinkTank() {}
+
+        @Override
+        protected Move doInBackground() throws Exception {
+            MoveStrategy miniMax = new MiniMax(4);
+            Move bestMove = miniMax.execute(Table.get().getGameBoard());
+            return bestMove;
+        }
+
+        @Override
+        public void done() {
+            try {
+                Move bestMove = get();
+                Table.get().updateComputerMove(bestMove);
+                Table.get().updateGameBoard(Table.get().getGameBoard().getCurrentPlayer().makeMove(bestMove).getBoard());
+                Table.get().getBoardPanel().drawBoard(Table.get().getGameBoard());
+                Table.get().moveMadeUpdate(PlayerType.COMPUTER);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } catch (ExecutionException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public enum BoardDirection {
@@ -151,6 +260,10 @@ public class Table {
         }
     }
 
+    enum PlayerType {
+        HUMAN, COMPUTER
+    }
+
     private class TilePanel extends JPanel {
         private final int tileCoordinate;
         private final Color lightTileColor = Color.decode("#eeeed2");
@@ -192,6 +305,9 @@ public class Table {
                         SwingUtilities.invokeLater(new Runnable() {
                             @Override
                             public void run() {
+                                if (gameSetup.isAIPlayer(chessBoard.getCurrentPlayer())) {
+                                    Table.get().moveMadeUpdate(PlayerType.HUMAN);
+                                }
                                 boardPanel.drawBoard(chessBoard);
                             }
                         });
@@ -258,10 +374,32 @@ public class Table {
 
         private Collection<Move> pieceLegalMoves(Board board) {
             if (humanMovedPiece != null && humanMovedPiece.getAlliance() == board.getCurrentPlayer().getAlliance()) {
-                return humanMovedPiece.calculateLegalMoves(board);
+                //return humanMovedPiece.calculateLegalMoves(board);
+                return ImmutableList.copyOf(Iterables.concat ( humanMovedPiece.calculateLegalMoves(board),
+                        chessBoard.getCurrentPlayer().calculateKingCastles(chessBoard.getCurrentPlayer().getLegalMoves(),
+                                chessBoard.getCurrentPlayer().getOpponent().getLegalMoves()) ));
             }
             return Collections.emptyList();
         }
+
+        /*
+
+    For anyone wondering if you configure PieceLegalMoves method in this way,  it will start highlighting castle moves.
+
+    if (humanMovedPiece != null && humanMovedPiece.getPieceAlliance() == board.getCurrentPlayer().getAlliance()) {
+                // return a list of all the legal moves + the castle moves
+                return ImmutableList.copyOf(Iterables.concat ( humanMovedPiece.calculateLegalMoves(board),
+                      chessBoard.getCurrentPlayer().calculateKingCastles(chessBoard.getCurrentPlayer().getLegalMoves(),
+                                                           chessBoard.getCurrentPlayer().getOpponent().getLegalMoves()) ));
+            }
+            return Collections.emptyList();
+
+         It will start highlighting two moves with the Rook (say, on G1 field, you will have two green dots). Then to fix this minor issue you can go to and add this if condition, which just says if the move is a castling move and the piece is not a king, don't highlight.
+
+        if ( !sourceTile.getPiece().getPieceType().isKing() && move.isCastlingMove()) {
+                            continue;
+                        }
+         */
     }
 
 
