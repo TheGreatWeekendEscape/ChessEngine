@@ -58,9 +58,8 @@ public class BoardUtils {
     }
 
     private static boolean[] initRows(int rowNumber) {
-
         boolean[] rows = new boolean[NUM_TILES];
-        for (int i = (rowNumber * TILES_PER_ROW); i < TILES_PER_ROW; i++) {
+        for (int i = (rowNumber * TILES_PER_ROW); i < ((rowNumber * TILES_PER_ROW) + TILES_PER_ROW); i++) {
             rows[i] = true;
         }
 

@@ -2,9 +2,9 @@ package com.chess.engine.board;
 
 public class MoveTransition {
 
-    private Board board;
-    private Move move;
-    private MoveStatus moveStatus;
+    private final Board board;
+    private final Move move;
+    private final MoveStatus moveStatus;
 
     public MoveTransition(Board board, Move move, MoveStatus moveStatus) {
         this.board = board;
@@ -17,4 +17,6 @@ public class MoveTransition {
     }
 
     public Board getBoard() { return this.board; };
+
+    public Move getMove() {return this.move; }
 }

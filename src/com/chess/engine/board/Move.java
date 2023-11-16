@@ -11,7 +11,6 @@ public abstract class Move {
     protected final Piece piece;
     protected final int targetCoordinate;
     protected final boolean isFirstMove;
-    public static final Move NULL_MOVE = new NullMove();
 
     private Move(Board board, Piece piece, int targetCoordinate) {
         this.board = board;
@@ -42,10 +41,6 @@ public abstract class Move {
     public Board getBoard() { return this.board; }
 
     public boolean isAttack() {
-        return false;
-    }
-
-    public boolean isCastlingMove() {
         return false;
     }
 
@@ -270,10 +265,6 @@ public abstract class Move {
             return this.castleRook;
         }
 
-        public boolean isCastlingMove() {
-            return true;
-        }
-
         @Override
         public int hashCode() {
             final int prime = 31;
@@ -307,7 +298,6 @@ public abstract class Move {
                 builder.setPiece(piece);
             }
             builder.setPiece(this.piece.movePiece(this));
-            //TODO Look into the first move on normal pieces
             builder.setPiece(new Rook(this.castleRookDestinationCoordinate, this.castleRook.getAlliance()));
             builder.setMoveMaker(this.board.getCurrentPlayer().getOpponent().getAlliance());
             return builder.build();
@@ -429,7 +419,7 @@ public abstract class Move {
                     return move;
                 }
             }
-            return NULL_MOVE;
+            return new NullMove();
         }
     }
 }

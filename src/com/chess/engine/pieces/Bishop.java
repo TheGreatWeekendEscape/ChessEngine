@@ -69,6 +69,6 @@ public class Bishop extends Piece {
 
     @Override
     public Bishop movePiece(Move move) {
-        return new Bishop(move.getTargetCoordinate(), move.getPiece().getAlliance());
+        return new Bishop(move.getTargetCoordinate(), move.getPiece().getAlliance(), false);
     }
 }

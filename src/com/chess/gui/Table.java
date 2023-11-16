@@ -24,14 +24,14 @@ import static javax.swing.SwingUtilities.isRightMouseButton;
 
 public class Table {
 
-    private JFrame gameFrame;
-    private BoardPanel boardPanel;
+    private final JFrame gameFrame;
+    private final BoardPanel boardPanel;
     private Board chessBoard;
     private Tile sourceTile;
     private Tile destinationTile;
     private Piece humanMovedPiece;
     private BoardDirection boardDirection;
-    private static String defaultPieceImagesPath = "images/pieceIcons_v2/";
+    private final static String defaultPieceImagesPath = "images/pieceIcons_v2/";
     private final static Dimension OUTER_FRAME_DIMENSION = new Dimension(600, 600);
     private final static Dimension BOARD_PANEL_DIMENSION = new Dimension(400, 350);
     private final static Dimension TILE_PANEL_DIMENSION = new Dimension(10, 10);
@@ -42,6 +42,7 @@ public class Table {
         JMenuBar tableMenuBar = createMenuBar();
         this.gameFrame.setJMenuBar(tableMenuBar);
         this.gameFrame.setSize(OUTER_FRAME_DIMENSION);
+        this.gameFrame.setResizable(false);
         this.chessBoard = Board.createStandardBoard();
         this.gameFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.boardPanel = new BoardPanel();
@@ -150,40 +151,8 @@ public class Table {
         }
     }
 
-    public static class MoveLog {
-        private final List<Move> moves;
-
-        MoveLog() {
-            this.moves = new ArrayList<>();
-        }
-
-        public List<Move> getMoves() {
-            return moves;
-        }
-
-        public void addMove(Move move) {
-            this.moves.add(move);
-        }
-
-        public int size() {
-            return moves.size();
-        }
-
-        public void clear() {
-            this.moves.clear();
-        }
-
-        public Move removeMove(int index) {
-            return this.moves.remove(index);
-        }
-
-        public boolean removeMove(Move move) {
-            return this.moves.remove(move);
-        }
-    }
-
     private class TilePanel extends JPanel {
-        private int tileCoordinate;
+        private final int tileCoordinate;
         private final Color lightTileColor = Color.decode("#eeeed2");
         private final Color darkTileColor = Color.decode("#769656");
 
@@ -208,14 +177,14 @@ public class Table {
                                 sourceTile = null;
                             }
                         } else {
+                            System.out.println("First move: " + humanMovedPiece.isFirstMove());
                             destinationTile = chessBoard.getTile(tileCoordinate);
                             Move move = Move.MoveFactory.createMove(chessBoard, sourceTile.getCoordinate(), destinationTile.getCoordinate());
                             MoveTransition transition = chessBoard.getCurrentPlayer().makeMove(move);
                             if (transition.getMoveStatus() == MoveStatus.DONE) {
                                 chessBoard = transition.getBoard();
-                                System.out.println(move);
-                                //TODO Add the move that was made to the move log
                             }
+
                             sourceTile = null;
                             destinationTile = null;
                             humanMovedPiece = null;
@@ -260,11 +229,11 @@ public class Table {
             if (board.getTile(this.tileCoordinate).isOccupied()) {
                 try {
                     BufferedImage image = ImageIO.read(new File
-                            (defaultPieceImagesPath + board.getTile(this.tileCoordinate).getPiece().getAlliance().toString().substring(0, 1)
+                            (defaultPieceImagesPath + board.getTile(this.tileCoordinate).getPiece().getAlliance().toString().charAt(0)
                                     + board.getTile(this.tileCoordinate).getPiece().toString() + ".png"));
                     add(new JLabel(new ImageIcon(image)));
                 } catch (IOException ex) {
-                    ex.printStackTrace();
+                    throw new RuntimeException(ex.getMessage());
                 }
 
             }
@@ -280,8 +249,8 @@ public class Table {
                 if (move.getTargetCoordinate() == this.tileCoordinate) {
                     try {
                         add(new JLabel(new ImageIcon(ImageIO.read(new File("images/highlight.png")))));
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    } catch (Exception ex) {
+                        throw new RuntimeException(ex.getMessage());
                     }
                 }
             }

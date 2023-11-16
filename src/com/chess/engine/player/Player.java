@@ -19,7 +19,7 @@ public abstract class Player {
     protected Board board;
     protected King king;
     protected Collection<Move> legalMoves;
-    private boolean isInCheck;
+    private final boolean isInCheck;
 
     public Player(Board board, Collection<Move> legalMoves, Collection<Move> opponentMoves) {
         this.board = board;
@@ -73,25 +73,19 @@ public abstract class Player {
         return !this.isInCheck && !hasEscapeMoves();
     }
 
-    public boolean isCastled() {
-        //TODO Implement method
-        return false;
-    }
 
     public MoveTransition makeMove(Move move) {
         if (!isMoveLegal(move)) {
             return new MoveTransition(this.board, move, MoveStatus.ILLEGAL_MOVE);
         }
         Board transitionBoard = move.execute();
-        System.out.println(transitionBoard);
+
         Collection<Move> kingsAttacks = calculateAttacksOnTile(transitionBoard.getCurrentPlayer().getOpponent().getKing().getPosition(),
                 transitionBoard.getCurrentPlayer().getLegalMoves());
 
         if (!kingsAttacks.isEmpty()) {
             return new MoveTransition(this.board, move, MoveStatus.LEAVES_PLAYER_IN_CHECK);
         }
-
-        //move.getPiece().setFirstMove(false);
 
         return new MoveTransition(transitionBoard, move, MoveStatus.DONE);
 

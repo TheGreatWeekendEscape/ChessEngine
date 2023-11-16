@@ -51,10 +51,6 @@ public abstract class Piece {
         return this.firstMove;
     }
 
-    public int getPieceValue() {
-        return this.type.getPieceValue();
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -82,8 +78,8 @@ public abstract class Piece {
         QUEEN("Q", 9),
         KING("K", 0);
 
-        private String name;
-        private int pieceValue;
+        private final String name;
+        private final int pieceValue;
 
         PieceType(String name, int pieceValue) {
             this.name = name;

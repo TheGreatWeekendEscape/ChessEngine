@@ -14,10 +14,10 @@ public class Board {
     private final List<Tile> gameBoard;
     private final Collection<Piece> whitePieces;
     private final Collection<Piece> blackPieces;
-    private WhitePlayer whitePlayer;
-    private BlackPlayer blackPlayer;
-    private Player currentPlayer;
-    private Pawn enPassantPawn;
+    private final WhitePlayer whitePlayer;
+    private final BlackPlayer blackPlayer;
+    private final Player currentPlayer;
+    private final Pawn enPassantPawn;
 
     private Board(Builder builder) {
         this.gameBoard = createGameBoard(builder);
@@ -155,9 +155,8 @@ public class Board {
             return this;
         }
 
-        public Builder setMoveMaker(Alliance nextMoveMaker) {
+        public void setMoveMaker(Alliance nextMoveMaker) {
             this.nextMoveMaker = nextMoveMaker;
-            return this;
         }
 
         public void setEnPassantPawn(Pawn enPassantPawn) {
