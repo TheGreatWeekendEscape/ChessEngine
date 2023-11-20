@@ -1,7 +1,6 @@
 package com.chess.integration.engine.board;
 
 import com.chess.integration.engine.pieces.*;
-import com.chess.integration.engine.pieces.*;
 import com.chess.integration.engine.player.BlackPlayer;
 import com.chess.integration.engine.player.Player;
 import com.chess.integration.engine.player.WhitePlayer;
