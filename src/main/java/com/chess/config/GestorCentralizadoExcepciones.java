@@ -13,25 +13,19 @@ public class GestorCentralizadoExcepciones extends ResponseEntityExceptionHandle
 
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<?> handleGenericException(Exception ex, WebRequest request) {
-
         RespuestaErrorHttp respuestaErrorHttp = new RespuestaErrorHttp(ex.getMessage());
-
         return handleExceptionInternal(ex, respuestaErrorHttp, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
 
     @ExceptionHandler({IllegalStateException.class, IllegalArgumentException.class})
     protected ResponseEntity<?> handleRuntimeExceptions(Exception ex, WebRequest request) {
-
         RespuestaErrorHttp respuestaErrorHttp = new RespuestaErrorHttp(ex.getMessage());
-
         return handleExceptionInternal(ex, respuestaErrorHttp, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
     @ExceptionHandler(PresentationException.class)
     protected ResponseEntity<?> handlePresentationExceptions(PresentationException ex, WebRequest request) {
-
         RespuestaErrorHttp respuestaErrorHttp = new RespuestaErrorHttp(ex.getMessage());
-
         return handleExceptionInternal(ex, respuestaErrorHttp, new HttpHeaders(), ex.getHttpStatus(), request);
 
     }
