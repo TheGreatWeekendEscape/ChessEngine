@@ -5,6 +5,7 @@ import com.chess.integration.repositories.UserRepository;
 import com.chess.model.AuthDto;
 import com.chess.model.AuthResponseDto;
 
+import com.chess.model.Role;
 import com.chess.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -39,7 +40,8 @@ public class AuthServiceImpl implements AuthService {
     public AuthResponseDto register(AuthDto authDto) {
         User user = new User();
         user.setName(authDto.getName());
-        user.setPassword(authDto.getPassword());
+        user.setPassword(passwordEncoder.encode(authDto.getPassword()));
+        user.setRole(Role.USER); //TODO Informarme de como crear admins y para que quiero hacerlo
 
         userRepository.save(user);
         return new AuthResponseDto(jwtServiceImpl.getToken(user));
